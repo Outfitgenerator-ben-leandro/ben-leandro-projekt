@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Outfit-Generator</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=20260317-14">
+    <style>
+        body { background-color: #b0b0b0; color: #333; text-align: center; font-family: Arial, sans-serif; }
+        #outfitArea { position: relative; width: 400px; height: 600px; margin: 20px auto; border:none; background: #b0b0b0; }
+        #outfitArea.no-frame { border: none; }
+        #outfitArea.no-frame img { box-shadow: none; }
+        .clothing { position: absolute; width: 200px; height: 200px; cursor: grab; object-fit: contain; }
+        button { margin: 10px; padding: 10px 20px; font-size: 16px; }
+        .hidden { display: none; }
+        .clothing { position: absolute; width: 200px; height: 200px; cursor: grab; object-fit: contain; box-shadow: 0 0 0 2px rgba(0,0,0,0.05); }
+    </style>
+</head>
+
+<body>
+
+ <div id="startScreen" class="start-screen">
+     <div class="start-card">
+         <h2>Gib deinen Namen ein</h2>
+         <input id="startName" type="text" placeholder="Dein Name">
+         <button id="startBtn">Start</button>
+     </div>
+ </div>
+
+ <input id="username" type="hidden" value="">
+
+ <div id="app" class="hidden">
+     <h1>Outfit-Generator</h1>
+     <div id="welcome"></div>
+
+    <button onclick="generateOutfit()">Outfit erstellen</button>
+    <button onclick="downloadOutfit()">Outfit herunterladen</button>
+    <button id="toggleGalleryBtn" onclick="toggleGallery()">Galerie öffnen</button>
+
+     <div id="controls" style="margin-top:10px;">
+         <label for="category">Kategorie:</label>
+         <select id="category">
+             <option value="Oberteil">Oberteile</option>
+             <option value="Hose">Hosen</option>
+             <option value="Schuhe">Schuhe</option>
+         </select>
+         <input id="imageUpload" type="file" accept="image/*" multiple onchange="addMultipleItems()" />
+         <button onclick="addItem()">Kleidungsstück hinzufügen</button>
+     </div>
+
+     <div class="layout" style="display:flex;gap:20px;align-items:flex-start;justify-content:center;margin-top:18px">
+         <div id="outfitArea">
+            <div id="sticker" class="sticker" style="top:12px;left:12px;display:none">NEU</div>
+             <img id="shirt" class="clothing" style="top: 20px; left: 100px;" src="" alt="Oberteile">
+             <img id="pants" class="clothing" style="top: 220px; left: 100px;" src="" alt="Hosen">
+             <img id="shoes" class="clothing" style="top: 420px; left: 100px;" src="" alt="Schuhe">
+         </div>
+
+           <aside id="gallery" class="panel hidden">
+                             <button id="galleryCloseBtn" class="nav-btn" onclick="toggleGallery()">Schließen</button>
+                         <h3 id="galleryTitle" style="margin:0 0 12px;flex-shrink:0">Kleidungs-Galerie</h3>
+               <div id="galleryContent"></div>
+               <div id="galleryAddRow">
+                                     <select id="galleryCategory" aria-label="Galerie-Kategorie" onchange="updateGalleryAddButtonColor()">
+                       <option value="Oberteil">Oberteile</option>
+                       <option value="Hose">Hosen</option>
+                       <option value="Schuhe">Schuhe</option>
+                   </select>
+                                     <button id="galleryAddBtn" onclick="addGalleryField()">Feld hinzufügen</button>
+               </div>
+         </aside>
+
+     </div>
+ </div>
+
+ <script src="script.js?v=20260317-1"></script>
+
+</body>
+</html>

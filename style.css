@@ -1,0 +1,188 @@
+/* Light gray theme matching start screen */
+:root{
+	--bg:#b0b0b0;
+	--panel:#b0b0b0;
+	--muted:#4f4f4f;
+	--accent:#999;
+	--border:#9a9a9a;
+}
+html,body{height:100%;margin:0}
+body{font-family:Arial,sans-serif;background:var(--bg);color:#333}
+.container{max-width:1000px;margin:24px auto;padding:20px;box-sizing:border-box}
+.header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.title{font-size:1.6rem;letter-spacing:1px}
+.main-grid{display:grid;grid-template-columns:1fr 360px;gap:18px;margin-top:18px}
+.panel{background:var(--panel);border:2px solid var(--border);padding:14px}
+.controls{display:flex;flex-direction:column;gap:10px}
+input[type=text]{padding:10px;border:2px solid var(--border);background:var(--bg);color:#333}
+select{padding:10px;border:2px solid var(--border);background:var(--bg);color:#333}
+input[type=file]{
+	padding:0;
+	border:none;
+	background:transparent;
+	font-size:0;
+	color:transparent;
+}
+input[type=file]::file-selector-button{
+	padding:10px 14px;
+	border:2px solid #6f6f6f;
+	background:#8a8a8a;
+	font-size:16px;
+	color:#fff;
+	cursor:pointer;
+}
+input[type=file]::-webkit-file-upload-button{
+	padding:10px 14px;
+	border:2px solid #6f6f6f;
+	background:#8a8a8a;
+	font-size:16px;
+	color:#fff;
+	cursor:pointer;
+}
+button{padding:10px;border:2px solid #6f6f6f;background:#8a8a8a;color:#fff;cursor:pointer}
+.btn-accent{background:#8a8a8a;color:#fff;border:2px solid #6f6f6f}
+.outfit-wrap{display:flex;align-items:center;justify-content:center}
+.outfit{position:relative;width:320px;height:420px;border:2px solid var(--border);background:var(--bg)}
+.outfit img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+#welcome{color:var(--muted);margin-top:6px}
+#editPanel{margin-top:10px;padding:10px;background:var(--bg);border:2px solid var(--border)}
+#editContent{margin:8px 0;max-height:220px;overflow:auto}
+.edit-item{display:flex;gap:8px;align-items:center;padding:8px;background:var(--bg);border:1px dashed var(--border)}
+.edit-item img{width:48px;height:48px;object-fit:cover}
+.edit-item button{background:#8a8a8a;color:#fff;padding:6px 8px;border:2px solid #6f6f6f}
+
+/* preview row for whole outfit */
+.preview-row{display:flex;gap:12px;justify-content:center;margin-top:12px}
+.preview{width:86px;background:var(--bg);border:2px solid var(--border);padding:8px;box-sizing:border-box}
+.preview-label{font-size:0.75rem;color:var(--muted);margin-bottom:6px;text-align:center}
+.preview img{width:100%;height:80px;object-fit:cover;display:block}
+
+/* Responsive */
+@media(max-width:860px){
+	.main-grid{grid-template-columns:1fr}
+	.outfit{width:260px;height:340px}
+}
+
+/* small helper spacing */
+.muted{color:var(--muted);font-size:0.9rem}
+
+/* gallery full-screen layout */
+#gallery:not(.hidden){
+	background:var(--bg);
+	color:#333;
+}
+#galleryContent,
+#galleryAddRow,
+#gallery .cat,
+#gallery .thumbs{
+	background:var(--bg);
+}
+#galleryCloseBtn{
+	position:sticky;
+	top:0;
+	align-self:flex-end;
+	z-index:10;
+	margin:0 0 10px;
+}
+#galleryContent{
+	display:grid;
+	grid-template-columns:repeat(3,minmax(0,1fr));
+	gap:14px;
+	flex:1;
+	min-height:0;
+	overflow:hidden;
+}
+.cat{
+	display:flex;
+	flex-direction:column;
+	min-height:0;
+}
+.cat-label{
+	margin-bottom:8px;
+	font-weight:700;
+	letter-spacing:1px;
+	color:#333;
+}
+.thumbs{
+	display:grid;
+	grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+	gap:10px;
+	overflow:auto;
+	align-content:start;
+	flex:1;
+	min-height:0;
+}
+.thumb{
+	cursor:pointer;
+	border:2px solid var(--border);
+	background:var(--bg);
+	aspect-ratio:1;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	overflow:hidden;
+	transition:border-color .15s;
+	position:relative;
+}
+.thumb:hover{border-color:#999}
+.thumb img{width:100%;height:100%;object-fit:contain}
+.thumb-index{
+	position:absolute;
+	top:50%;
+	left:50%;
+	transform:translate(-50%, -50%);
+	color:#fff;
+	font-size:14px;
+	font-weight:700;
+	padding:0;
+	border:none;
+	background:transparent;
+	pointer-events:none;
+	text-shadow:0 1px 2px rgba(0,0,0,0.85);
+}
+#galleryAddRow{
+	margin-top:12px;
+	display:flex;
+	justify-content:center;
+	gap:10px;
+	flex-shrink:0;
+}
+#galleryAddRow button,
+#galleryAddRow select{
+	margin:0;
+}
+
+/* start screen */
+.start-screen{
+	position:fixed;
+	inset:0;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	background-color:var(--bg);
+	background-image:url('Ben-equal-stripes-hd.png');
+	background-size:cover;
+	background-position:center;
+	background-repeat:no-repeat;
+	z-index:60
+}
+.start-card{width:320px;text-align:center}
+.start-card input{width:100%;box-sizing:border-box}
+#app{background:var(--bg);color:#333;min-height:100vh;width:100%}
+
+#app .panel,
+#app #outfitArea,
+#app #controls,
+#app #galleryContent,
+#app #galleryAddRow,
+#app #gallery .cat,
+#app #gallery .thumbs,
+#app .thumb,
+#app .preview,
+#app #editPanel,
+#app .edit-item,
+#app select,
+#app input[type="text"],
+#app input[type="file"]{
+	background:var(--bg) !important;
+}
