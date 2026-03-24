@@ -6,16 +6,17 @@
     <title>Outfit-Generator</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=20260317-14">
+    <link rel="stylesheet" href="style.css?v=20260320-18">
     <style>
-        body { background-color: #b0b0b0; color: #333; text-align: center; font-family: Arial, sans-serif; }
-        #outfitArea { position: relative; width: 400px; height: 600px; margin: 20px auto; border:none; background: #b0b0b0; }
+        body { background-color: var(--bg); color: #333; text-align: center; font-family: 'Montserrat', sans-serif; }
+        #outfitArea { position: relative; width: 400px; height: 600px; margin: 20px auto; border:none; background: var(--panel); }
         #outfitArea.no-frame { border: none; }
         #outfitArea.no-frame img { box-shadow: none; }
-        .clothing { position: absolute; width: 200px; height: 200px; cursor: grab; object-fit: contain; }
+        .clothing { position: absolute; width: 200px; height: 200px; cursor: grab; object-fit: contain; user-select: none; -webkit-user-drag: none; }
         button { margin: 10px; padding: 10px 20px; font-size: 16px; }
         .hidden { display: none; }
-        .clothing { position: absolute; width: 200px; height: 200px; cursor: grab; object-fit: contain; box-shadow: 0 0 0 2px rgba(0,0,0,0.05); }
+        .clothing { position: absolute; width: 200px; height: 200px; cursor: grab; object-fit: contain; box-shadow: 0 0 0 2px rgba(0,0,0,0.05); user-select: none; -webkit-user-drag: none; }
+        .clothing.dragging { cursor: grabbing; }
     </style>
 </head>
 
@@ -23,59 +24,116 @@
 
  <div id="startScreen" class="start-screen">
      <div class="start-card">
-         <h2>Gib deinen Namen ein</h2>
-         <input id="startName" type="text" placeholder="Dein Name">
-         <button id="startBtn">Start</button>
+         <h2 data-i18n="startHeading">Gib deinen Namen ein</h2>
+         <div class="lang-bar start-lang-bar">
+             <button type="button" class="lang-btn" onclick="setLanguage('de')" data-lang="de">DE</button>
+             <button type="button" class="lang-btn" onclick="setLanguage('en')" data-lang="en">EN</button>
+             <button type="button" class="lang-btn" onclick="setLanguage('fr')" data-lang="fr">FR</button>
+             <button type="button" class="lang-btn" onclick="setLanguage('it')" data-lang="it">IT</button>
+         </div>
+         <input id="startName" data-i18n-placeholder="startPlaceholder" type="text" placeholder="Dein Name">
+         <button id="startBtn" data-i18n="startBtn" type="button" onclick="startFromScreen()">Start</button>
      </div>
  </div>
 
  <input id="username" type="hidden" value="">
 
  <div id="app" class="hidden">
-     <h1>Outfit-Generator</h1>
+     <div class="top-menu-wrap">
+         <button id="topMenuBtn" class="top-menu-btn" type="button" onclick="toggleTopMenu()" aria-label="Menü öffnen" aria-expanded="false" aria-controls="topMenuPanel">☰</button>
+         <div id="topMenuPanel" class="top-menu-panel hidden" role="menu" aria-label="Schnellmenü">
+             <button type="button" data-i18n="btnAbout" onclick="openAboutFullscreen()" role="menuitem">Über uns</button>
+             <button type="button" data-i18n="btnGuide" onclick="openGuideFullscreen()" role="menuitem">Anleitung</button>
+             <a class="top-menu-feedback" data-i18n="btnFeedback" href="mailto:benkuster@gmx.ch,leandrolacognata@gmail.com?subject=Feedback%20Outfit-Generator" role="menuitem">Fehler / Verbesserung melden</a>
+         </div>
+     </div>
+
+     <h1 data-i18n="appTitle">Outfit Generator</h1>
      <div id="welcome"></div>
 
-    <button onclick="generateOutfit()">Outfit erstellen</button>
-    <button onclick="downloadOutfit()">Outfit herunterladen</button>
-    <button id="toggleGalleryBtn" onclick="toggleGallery()">Galerie öffnen</button>
+     <div class="main-menu">
+         <div class="menu-actions">
+             <button class="menu-btn" data-i18n="btnGenerate" onclick="generateOutfit()">Outfit erstellen</button>
+             <button class="menu-btn" data-i18n="btnDownload" onclick="downloadOutfit()">Outfit herunterladen</button>
+             <button id="toggleGalleryBtn" class="menu-btn" onclick="toggleGallery()">Galerie öffnen</button>
+         </div>
 
-     <div id="controls" style="margin-top:10px;">
-         <label for="category">Kategorie:</label>
-         <select id="category">
-             <option value="Oberteil">Oberteile</option>
-             <option value="Hose">Hosen</option>
-             <option value="Schuhe">Schuhe</option>
-         </select>
-         <input id="imageUpload" type="file" accept="image/*" multiple onchange="addMultipleItems()" />
-         <button onclick="addItem()">Kleidungsstück hinzufügen</button>
+         <div id="controls" class="menu-controls">
+             <label data-i18n="labelCategory" for="category">Kategorie:</label>
+             <select id="category">
+                 <option value="Oberteil">Oberteile</option>
+                 <option value="Hose">Hosen</option>
+                 <option value="Schuhe">Schuhe</option>
+             </select>
+             <input id="imageUpload" type="file" accept="image/*" multiple style="display:none" />
+             <button class="menu-btn" data-i18n="btnChooseFile" type="button" onclick="document.getElementById('imageUpload').click()">Dateien auswählen</button>
+             <button class="menu-btn menu-btn-primary" data-i18n="btnAddItem" onclick="addItem()">Kleidungsstück hinzufügen</button>
+         </div>
+
      </div>
+
+     <section id="aboutFullscreen" class="about-fullscreen hidden" aria-modal="true" role="dialog" aria-labelledby="aboutFullscreenTitle">
+         <div class="about-fullscreen-card">
+             <button type="button" data-i18n="btnClose" class="about-fullscreen-close" onclick="closeAboutFullscreen()">Schließen</button>
+             <h2 data-i18n="aboutTitle" id="aboutFullscreenTitle">Über uns</h2>
+             <div id="aboutFullscreenText"></div>
+         </div>
+     </section>
+
+     <section id="guideFullscreen" class="about-fullscreen hidden" aria-modal="true" role="dialog" aria-labelledby="guideFullscreenTitle">
+         <div class="about-fullscreen-card">
+             <button type="button" data-i18n="btnClose" class="about-fullscreen-close" onclick="closeGuideFullscreen()">Schließen</button>
+             <h2 data-i18n="guideTitle" id="guideFullscreenTitle">Anleitung</h2>
+             <div id="guideFullscreenText"></div>
+         </div>
+     </section>
 
      <div class="layout" style="display:flex;gap:20px;align-items:flex-start;justify-content:center;margin-top:18px">
          <div id="outfitArea">
+            <div class="outfit-rate-floating">
+                <button id="outfitLikeBtn" class="outfit-rate-btn" type="button" onclick="rateCurrentOutfit(true)">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="M9 11V21H5V11H9ZM21 10C21 8.9 20.1 8 19 8H13.31L14.27 3.43L14.3 3.11C14.3 2.7 14.13 2.32 13.85 2.05L12.79 1L6.21 7.59C5.84 7.95 5.62 8.45 5.62 9V19C5.62 20.1 6.52 21 7.62 21H16.62C17.45 21 18.16 20.5 18.46 19.78L21.48 12.73C21.58 12.5 21.63 12.25 21.63 12V10H21Z"/>
+                    </svg>
+                </button>
+                <button id="outfitDislikeBtn" class="outfit-rate-btn" type="button" onclick="rateCurrentOutfit(false)">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="M15 13V3H19V13H15ZM3 14C3 15.1 3.9 16 5 16H10.69L9.73 20.57L9.7 20.89C9.7 21.3 9.87 21.68 10.15 21.95L11.21 23L17.79 16.41C18.16 16.05 18.38 15.55 18.38 15V5C18.38 3.9 17.48 3 16.38 3H7.38C6.55 3 5.84 3.5 5.54 4.22L2.52 11.27C2.42 11.5 2.37 11.75 2.37 12V14H3Z"/>
+                    </svg>
+                </button>
+            </div>
             <div id="sticker" class="sticker" style="top:12px;left:12px;display:none">NEU</div>
-             <img id="shirt" class="clothing" style="top: 20px; left: 100px;" src="" alt="Oberteile">
-             <img id="pants" class="clothing" style="top: 220px; left: 100px;" src="" alt="Hosen">
-             <img id="shoes" class="clothing" style="top: 420px; left: 100px;" src="" alt="Schuhe">
+             <img id="shirt" class="clothing" style="top: 200px; left: 100px;" src="" alt="Oberteile">
+             <img id="pants" class="clothing" style="top: 200px; left: 100px;" src="" alt="Hosen">
+             <img id="shoes" class="clothing" style="top: 200px; left: 100px;" src="" alt="Schuhe">
          </div>
 
            <aside id="gallery" class="panel hidden">
-                             <button id="galleryCloseBtn" class="nav-btn" onclick="toggleGallery()">Schließen</button>
+                             <button id="galleryCloseBtn" data-i18n="btnClose" class="nav-btn" onclick="toggleGallery()">Schließen</button>
                          <h3 id="galleryTitle" style="margin:0 0 12px;flex-shrink:0">Kleidungs-Galerie</h3>
                <div id="galleryContent"></div>
+               <div id="trashPanel" class="hidden">
+                                     <div id="trashHeader">
+                                         <h4 id="trashTitle">Papierkorb (0)</h4>
+                                         <button id="trashClearBtn" data-i18n="btnTrashClear" type="button" onclick="emptyTrashPermanently()">Alle dauerhaft löschen</button>
+                                     </div>
+                                     <div id="trashContent"></div>
+               </div>
                <div id="galleryAddRow">
                                      <select id="galleryCategory" aria-label="Galerie-Kategorie" onchange="updateGalleryAddButtonColor()">
                        <option value="Oberteil">Oberteile</option>
                        <option value="Hose">Hosen</option>
                        <option value="Schuhe">Schuhe</option>
                    </select>
-                                     <button id="galleryAddBtn" onclick="addGalleryField()">Feld hinzufügen</button>
+                                     <button id="galleryAddBtn" data-i18n="btnAddField" onclick="addGalleryField()">Feld hinzufügen</button>
                </div>
+               <button id="trashToggleBtn" type="button" onclick="toggleTrashPanel()" aria-label="Papierkorb öffnen" title="Papierkorb öffnen">🗑️</button>
          </aside>
 
      </div>
  </div>
 
- <script src="script.js?v=20260317-1"></script>
+ <script src="script.js?v=20260320-13"></script>
 
 </body>
 </html>

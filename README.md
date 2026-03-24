@@ -2,6 +2,14 @@
 
 Ein einfacher Outfit-Generator mit Startseite, Galerie, Upload und Download-Funktion.
 
+## Stand heute (17.03.2026)
+
+- Startseite nutzt ein eigenes Fullscreen-Hintergrundbild: `Ben-equal-stripes-hd.png`.
+- Galerie ist wieder im Fullscreen-Overlay wie zuvor.
+- Kategorienamen in der UI sind auf Deutsch pluralisiert: **Oberteile** und **Hosen**.
+- Pro Kategorie werden wieder die Standard-Felder 1 bis 15 hergestellt.
+- Aktuelle Sicherung wurde erstellt: `backup-20260317-131430/`.
+
 ## Welche Datei ist wofür?
 
 - `index.html`  
@@ -19,8 +27,8 @@ Ein einfacher Outfit-Generator mit Startseite, Galerie, Upload und Download-Funk
 - Weitere Bilddateien (`Ben.jpg`, `lol.png`, `start-bg-clean.png`, `nothing.jpeg`, WhatsApp-Bilder)  
 	Zusätzliche/ältere Bilder aus der Bearbeitung. Nur nötig, wenn du sie aktiv verwenden willst.
 
-- `backup-20260317-130207/`  
-	Sicherheitskopie des Projekts.
+- `backup-.../`  
+	Sicherheitskopien des Projekts (Zeitstempel im Ordnernamen).
 
 ## Für GitHub hochladen (Minimum)
 
@@ -38,7 +46,7 @@ Optional:
 
 ## Nicht nötig für GitHub
 
-- `backup-20260317-130207/`
+- `backup-.../`
 - `Git-2.53.0.2-64-bit.exe`
 
 ## GitHub Pages online stellen
